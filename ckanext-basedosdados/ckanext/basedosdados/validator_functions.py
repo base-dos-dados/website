@@ -41,41 +41,13 @@ def only_on_types(*types):
 
     return validator
 
-
-def bdm_table_columns_metadata_validator(data):
-    from ckanext.basedosdados.bdm_table_column_metadata_validator import column_validator
-
-    print( "########################## VALIDATING COLUMNS ##################################")
-
-    def validator(key, data, errors, con):
-        validated = column_validator.validate_columns_from_dict(data)
-        if validated:
-            errors[key].append(str(validated))
-
-    return validator
-
-
-def bdm_table_columns_name_validator(*field):
-    from ckanext.basedosdados.bdm_table_column_metadata_validator import column_validator
-
-    print( "########################## VALIDATING NAMES ##################################")
-
-    def validator(key, data, errors, con):
-        validated = column_validator.validate_name(field)
-        if validated:
-            errors[key].append(str(validated))
-
-    return validator
-
-
-def bdm_table_columns_description_validator(*field):
-    from ckanext.basedosdados.bdm_table_column_metadata_validator import column_validator
-
-    print( "########################## VALIDATING DESCRIPTIONS ##################################")
-
-    def validator(key, data, errors, con):
-        validated = column_validator.validate_description(data)
-        if not validated:
-            errors[key].append(validated)
-
-    return validator
+def string_validator(value):
+    if type(value) == str:
+        return value
+            
+def not_missing(value):
+    if value is not None:
+        return value
+    else:
+        value=""
+        return value

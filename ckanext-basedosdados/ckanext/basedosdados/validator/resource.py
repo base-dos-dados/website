@@ -18,71 +18,77 @@ YES_NO = Literal["yes", "no"]
 
 F = Field
 
+
 class UpdateFrequencyEnum(AttrEnum):
-    second                        = {"label": "Second"}
-    minute                        = {"label": "Minute"}
-    hour                          = {"label": "Hour"}
-    day                           = {"label": "Day"}
-    week                          = {"label": "Week"}
-    month                         = {"label": "Month"}
-    quarter                       = {"label": "Quarter"}
-    semester                      = {"label": "Semester"}
-    one_year                      = {"label": "One Year"}
-    two_years                     = {"label": "Two Years"}
-    three_years                   = {"label": "Three Years"}
-    four_years                    = {"label": "Four Years"}
-    five_years                    = {"label": "Five Years"}
-    ten_years                     = {"label": "Ten Years"}
-    unique                        = {"label": "Unique"}
-    recurring                     = {"label": "Recurring"}
-    empty                         = {"label": "Empty"}
-    other                         = {"label": "Other"}
+    second = {"label": "Second"}
+    minute = {"label": "Minute"}
+    hour = {"label": "Hour"}
+    day = {"label": "Day"}
+    week = {"label": "Week"}
+    month = {"label": "Month"}
+    quarter = {"label": "Quarter"}
+    semester = {"label": "Semester"}
+    one_year = {"label": "One Year"}
+    two_years = {"label": "Two Years"}
+    three_years = {"label": "Three Years"}
+    four_years = {"label": "Four Years"}
+    five_years = {"label": "Five Years"}
+    ten_years = {"label": "Ten Years"}
+    unique = {"label": "Unique"}
+    recurring = {"label": "Recurring"}
+    empty = {"label": "Empty"}
+    other = {"label": "Other"}
 
 
 class LanguageEnum(AttrEnum):
-    german                        = {"label": "German"}
-    arabic                        = {"label": "Arabic"}
-    bahasa                        = {"label": "Bahasa"}
-    bengali                       = {"label": "Bengali"}
-    chinese                       = {"label": "Chinese"}
-    spanish                       = {"label": "Spanish"}
-    french                        = {"label": "French"}
-    hebrew                        = {"label": "Hebrew"}
-    hindi                         = {"label": "Hindi"}
-    english                       = {"label": "English"}
-    japanese                      = {"label": "Japanese"}
-    malay                         = {"label": "Malay"}
-    portuguese                    = {"label": "Portuguese"}
-    russian                       = {"label": "Russian"}
-    thai                          = {"label": "Thai"}
-    urdu                          = {"label": "Urdu"}
+    german = {"label": "German"}
+    arabic = {"label": "Arabic"}
+    bahasa = {"label": "Bahasa"}
+    bengali = {"label": "Bengali"}
+    chinese = {"label": "Chinese"}
+    spanish = {"label": "Spanish"}
+    french = {"label": "French"}
+    hebrew = {"label": "Hebrew"}
+    hindi = {"label": "Hindi"}
+    english = {"label": "English"}
+    japanese = {"label": "Japanese"}
+    malay = {"label": "Malay"}
+    portuguese = {"label": "Portuguese"}
+    russian = {"label": "Russian"}
+    thai = {"label": "Thai"}
+    urdu = {"label": "Urdu"}
 
 
 class AvailabilityEnum(AttrEnum):
-    online                        = {"label": "Online"}
-    physical                      = {"label": "Physical (CD, DVD, paper, etc)"}
-    in_person                     = {"label": "In Person"}
+    online = {"label": "Online"}
+    physical = {"label": "Physical (CD, DVD, paper, etc)"}
+    in_person = {"label": "In Person"}
 
 
 class StatusEnum(AttrEnum):
-    processing                    = {"label": "Processing"}
-    answered                      = {"label": "Answered"}
-    denied                        = {"label": "Denied"}
+    processing = {"label": "Processing"}
+    answered = {"label": "Answered"}
+    denied = {"label": "Denied"}
 
 
-RESOURCE_TYPES = ['bdm_table', 'external_link'] # TODO: add something that test that subclasses obey this constant
+RESOURCE_TYPES = [
+    "bdm_table",
+    "external_link",
+]  # TODO: add something that test that subclasses obey this constant
+
 
 class _CkanDefaultResource(BaseModel):
     id: IdType
     name: Str
     description: Str
     position: int
-    url: Optional[str] # reserved in ckan
+    url: Optional[str]  # reserved in ckan
+
 
 class Resource(_CkanDefaultResource):
-    spatial_coverage: Optional[Str] # Required for tier 1
-    temporal_coverage: Optional[TemporalCoverage] # Required for tier 1
-    update_frequency: Optional[UpdateFrequencyEnum] # Required for tier 1
+    spatial_coverage: Optional[Str]  # Required for tier 1
+    temporal_coverage: Optional[TemporalCoverage]  # Required for tier 1
+    update_frequency: Optional[UpdateFrequencyEnum]  # Required for tier 1
 
 
 # TODO: Remove only_on_types, required
@@ -104,28 +110,35 @@ class LaiRequest(Resource):
     lai_n: int
 """
 
+
 class BdmTable(Resource):
-    resource_type:           Literal["bdm_table"]
+    resource_type: Literal["bdm_table"]
 
-    table_id:                Str
-    auxiliary_files_url:     Optional[Str]
-    treatment_description:   Optional[Str]                    = F(title='Descricao do tratamento')
-    observation_level:       Optional[Set[ObservationLevel]]  = F(max_items=10) # Required for tier 1
-    columns:                 Optional[Str]                            # Required for tier 1
-    primary_keys:            Optional[Str]                            # Required for tier 1
-    version:                 Optional[Str]                            # Required for tier 1
-    publisher:               Optional[Str]                            # Required for tier 1
-    publisher_email:         Optional[Str]                            # Required for tier 1
-    publisher_github:        Optional[Str]                            # Required for tier 1
-    publisher_website:       Optional[Str]                            # Required for tier 1
+    table_id: Str
+    auxiliary_files_url: Optional[Str]
+    treatment_description: Optional[Str] = F(title="Descricao do tratamento")
+    observation_level: Optional[Set[ObservationLevel]] = F(
+        max_items=10
+    )  # Required for tier 1
+    columns: Optional[Str]  # Required for tier 1
+    primary_keys: Optional[Str]  # Required for tier 1
+    version: Optional[Str]  # Required for tier 1
+    publisher: Optional[Str]  # Required for tier 1
+    publisher_email: Optional[Str]  # Required for tier 1
+    publisher_github: Optional[Str]  # Required for tier 1
+    publisher_website: Optional[Str]  # Required for tier 1
 
-    _observation_level_validator = treat_scalar_as_single_value_set('observation_level')
+    _observation_level_validator = treat_scalar_as_single_value_set("observation_level")
 
-    bdm_file_size: Union[int, None, Literal['Unavailable', '']] # should not be editable in form, also, check what use is Unavailable
+    bdm_file_size: Union[
+        int, None, Literal["Unavailable", ""]
+    ]  # should not be editable in form, also, check what use is Unavailable
 
-    @validator('bdm_file_size')
-    def null_string_is_none(cls, value): # TODO: check why this is not working, as it is still failing when we pass a ''. Had to add '' to type signature
-        if value == '':
+    @validator("bdm_file_size")
+    def null_string_is_none(
+        cls, value
+    ):  # TODO: check why this is not working, as it is still failing when we pass a ''. Had to add '' to type signature
+        if value == "":
             return None
 
     # TODO: implement this
