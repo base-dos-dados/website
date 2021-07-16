@@ -10,7 +10,7 @@ jobs:
   link-check:
     runs-on: ubuntu-latest
     env:
-      SPREADSHEET_ID: "1xgHH99zDFZQQg6dp0O4Y05W1SdXTAveXh59g3wwXLn4"
+      SPREADSHEET_ID: "1PuiifcuMCkQLodSRDl0ELEKnQWhp7oUxzuM0cb50hwE"
       RANGE_NAME: "HomeBrokenLinks!A1:Z1000"
       GDOCS_SERVICE_ACCOUNT: ${{ secrets.GDOCS_SERVICE_ACCOUNT }}
     steps:
